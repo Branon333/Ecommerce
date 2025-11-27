@@ -31,9 +31,11 @@
 Add these in Vercel Dashboard → Settings → Environment Variables:
 
 ```
-REACT_APP_API_URL=your_backend_api_url
+REACT_APP_API_URL=https://ecommerce-0or2.onrender.com/api
 REACT_APP_ENV=production
 ```
+
+**Important:** Make sure to include `/api` at the end of the URL since your backend routes are prefixed with `/api`.
 
 ### 4. Deploy
 
