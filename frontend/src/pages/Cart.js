@@ -76,6 +76,15 @@ const Cart = () => {
                   <div className="flex-grow">
                     <h3 className="font-semibold text-lg">{item.product?.name}</h3>
                     <p className="text-gray-600">${item.price} each</p>
+                    {item.product?.stock !== undefined && (
+                      <p className={`text-sm mt-1 ${
+                        item.product.stock > 0 ? 'text-green-600' : 'text-red-600'
+                      }`}>
+                        {item.product.stock > 0 
+                          ? `${item.product.stock} in stock` 
+                          : 'Out of stock'}
+                      </p>
+                    )}
                     <div className="flex items-center space-x-4 mt-2">
                       <button
                         onClick={() => updateQuantityMutation.mutate({

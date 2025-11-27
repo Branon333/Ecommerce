@@ -8,10 +8,17 @@ import { AppError } from '../middleware/errorHandler.js';
 const router = express.Router();
 
 // Generate JWT Token
-const generateToken = (userId) => {
-  return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE || '7d'
-  });
+const generateToken = (user) => {
+  return jwt.sign(
+    { 
+      id: user._id || user.id,
+      role: user.role 
+    }, 
+    process.env.JWT_SECRET, 
+    {
+      expiresIn: process.env.JWT_EXPIRE || '7d'
+    }
+  );
 };
 
 // @route   POST /api/auth/register
@@ -50,7 +57,7 @@ router.post('/register', [
     });
 
     // Generate token
-    const token = generateToken(user._id);
+    const token = generateToken(user);
 
     res.status(201).json({
       success: true,
@@ -104,7 +111,7 @@ router.post('/login', [
     }
 
     // Generate token
-    const token = generateToken(user._id);
+    const token = generateToken(user);
 
     res.json({
       success: true,

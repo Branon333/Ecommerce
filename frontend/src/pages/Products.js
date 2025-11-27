@@ -97,11 +97,16 @@ const Products = () => {
                     <span className="text-2xl font-bold text-primary-600">
                       ${product.price}
                     </span>
-                    {product.stock > 0 ? (
-                      <span className="text-sm text-green-600">In Stock</span>
-                    ) : (
-                      <span className="text-sm text-red-600">Out of Stock</span>
-                    )}
+                    <div className="flex flex-col items-end">
+                      {product.stock > 0 ? (
+                        <>
+                          <span className="text-sm font-semibold text-green-600">In Stock</span>
+                          <span className="text-xs text-gray-500">{product.stock} available</span>
+                        </>
+                      ) : (
+                        <span className="text-sm font-semibold text-red-600">Out of Stock</span>
+                      )}
+                    </div>
                   </div>
                 </div>
               </Link>

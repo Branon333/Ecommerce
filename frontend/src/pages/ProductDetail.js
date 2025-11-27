@@ -70,9 +70,24 @@ const ProductDetail = () => {
             <p className="text-3xl font-bold text-primary-600 mb-4">${product.price}</p>
             <p className="text-gray-600 mb-6">{product.description}</p>
             
-            <div className="mb-6">
+            <div className="mb-4">
               <span className="text-sm text-gray-500">Category: </span>
               <span className="text-sm font-semibold">{product.category}</span>
+            </div>
+
+            <div className="mb-6">
+              {product.stock > 0 ? (
+                <div className="flex items-center space-x-2">
+                  <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">
+                    In Stock
+                  </span>
+                  <span className="text-sm text-gray-600">{product.stock} available</span>
+                </div>
+              ) : (
+                <span className="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-semibold">
+                  Out of Stock
+                </span>
+              )}
             </div>
 
             {product.stock > 0 ? (

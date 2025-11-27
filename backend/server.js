@@ -23,6 +23,7 @@ import authRoutes from './routes/auth.js';
 import productRoutes from './routes/products.js';
 import orderRoutes from './routes/orders.js';
 import cartRoutes from './routes/cart.js';
+import adminRoutes from './routes/admin.js';
 
 const app = express();
 
@@ -68,6 +69,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/cart', cartRoutes);
+app.use('/api/admin', adminRoutes);
 
 // 404 handler (must be before error handler)
 app.use((req, res) => {
