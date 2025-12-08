@@ -37,6 +37,34 @@ const Products = () => {
     );
   }
 
+  const [addedIds, setAddedIds] = useState(new Set());
+
+  const handleAddToCart = (e, product) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    try {
+      const existing = JSON.parse(localStorage.getItem('cart') || '[]');
+      const idx = existing.findIndex((p) => p._id === product._id);
+      if (idx > -1) {
+        existing[idx].qty += 1;
+      } else {
+        existing.push({ ...product, qty: 1 });
+      }
+      localStorage.setItem('cart', JSON.stringify(existing));
+      const newSet = new Set(addedIds);
+      newSet.add(product._id);
+      setAddedIds(newSet);
+      setTimeout(() => {
+        const s = new Set(newSet);
+        s.delete(product._id);
+        setAddedIds(s);
+      }, 1500);
+    } catch (err) {
+      console.error('Add to cart error', err);
+    }
+  };
+
   return (
     <div className="min-h-screen py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -70,29 +98,35 @@ const Products = () => {
             <div className="col-span-full text-center py-12">
               <p className="text-gray-500 text-lg">No products found</p>
             </div>
-          ) : (
+            ) : (
             products.map((product) => (
-              <Link
+              <div
                 key={product._id}
-                to={`/products/${product._id}`}
-                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition"
+                className="relative bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition transform hover:scale-[1.02]"
               >
-                <div className="aspect-w-1 aspect-h-1 bg-gray-200">
-                  {product.images && product.images[0] ? (
-                    <img
-                      src={product.images[0]}
-                      alt={product.name}
-                      className="w-full h-48 object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
-                      <span className="text-gray-400">No Image</span>
-                    </div>
-                  )}
-                </div>
+                <Link to={`/products/${product._id}`} className="block">
+                  <div className="w-full bg-gray-200">
+                    {product.images && product.images[0] ? (
+                      <img
+                        src={product.images[0]}
+                        alt={product.name}
+                        className="w-full h-48 object-cover"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+                        <span className="text-gray-400">No Image</span>
+                      </div>
+                    )}
+                  </div>
+                </Link>
+
                 <div className="p-4">
-                  <h3 className="font-semibold text-lg mb-2">{product.name}</h3>
-                  <p className="text-gray-600 text-sm mb-2 line-clamp-2">{product.description}</p>
+                  <Link to={`/products/${product._id}`} className="block">
+                    <h3 className="font-semibold text-lg mb-2">{product.name}</h3>
+                    <p className="text-gray-600 text-sm mb-2 line-clamp-2">{product.description}</p>
+                  </Link>
+
                   <div className="flex justify-between items-center">
                     <span className="text-2xl font-bold text-primary-600">
                       ${product.price}
@@ -108,8 +142,18 @@ const Products = () => {
                       )}
                     </div>
                   </div>
+
+                  <div className="mt-3 flex items-center justify-between">
+                    <button
+                      onClick={(e) => handleAddToCart(e, product)}
+                      className="bg-primary-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-primary-700 transition"
+                    >
+                      {addedIds.has(product._id) ? 'Added' : 'Add to cart'}
+                    </button>
+                    <Link to={`/products/${product._id}`} className="text-sm text-gray-600 hover:text-primary-600">View</Link>
+                  </div>
                 </div>
-              </Link>
+              </div>
             ))
           )}
         </div>
